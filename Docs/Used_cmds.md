@@ -16,13 +16,18 @@ kubectl get pods
 kubectl describe pods [name]
 ```
 
+### Create Azure Resource Group
+```bash
+az group create -l westus -n b7luna
+```
+
 ### Create AKS Cluster
 ```bash
-az aks create -g b6luna -n AKSClusterLuna --enable-managed-identity --node-count 2 --enable-addons monitoring --enable-msi-auth-for-monitoring  --generate-ssh-keys
+az aks create -g b7luna -n AKSClusterLuna --enable-managed-identity --node-count 2 --enable-addons monitoring --enable-msi-auth-for-monitoring  --generate-ssh-keys
 ```
 ### Connect to the cluster
 ```bash
-az aks get-credentials --resource-group b6luna --name AKSClusterLuna
+az aks get-credentials --resource-group b7luna --name AKSClusterLuna
 ```
 ### Deploy the application
 [link](https://learn.microsoft.com/en-us/azure/aks/learn/quick-kubernetes-deploy-cli#code-try-7)
@@ -60,7 +65,7 @@ links :
 
 #### Create KT secret for access to file share
 ```bash
-kubectl create secret generic azure-secret --from-literal=azurestorageaccountname=b6lstorageacc --from-literal=azurestorageaccountkey=JBsbcnoq7ufOg+DJ45B6KN4YNow8GkHhjQHaJfyzn5DyVW9eU0mDfWTpUqMCEKDPWc0HZRyesp5s+AStmP212A==
+kubectl create secret generic azure-secret --from-literal=azurestorageaccountname=b7lstorageacc --from-literal=azurestorageaccountkey=JBsbcnoq7ufOg+DJ45B6KN4YNow8GkHhjQHaJfyzn5DyVW9eU0mDfWTpUqMCEKDPWc0HZRyesp5s+AStmP212A==
 ```
 ## Partie 2
 
@@ -71,15 +76,15 @@ MYACR=lunacr
 ```
 ##### Run the following line to create an Azure Container Registry if you do not already have one
 ```bash
-az acr create -n $MYACR -g b6luna --sku basic
+az acr create -n $MYACR -g b7luna --sku basic
 ```
 ##### Create an AKS cluster with ACR integration
 ```bash
-az aks create -g b6luna -n KlusterLuna --enable-managed-identity --node-count 4 --enable-addons monitoring --enable-msi-auth-for-monitoring  --generate-ssh-keys --attach-acr $MYACR
+az aks create -g b7luna -n KlusterLuna --enable-managed-identity --node-count 4 --enable-addons monitoring --enable-msi-auth-for-monitoring  --generate-ssh-keys --attach-acr $MYACR
 ```
 ### Connect to the cluster
 ```bash
-az aks get-credentials --resource-group b6luna --name KlusterLuna
+az aks get-credentials --resource-group b7luna --name KlusterLuna
 ```
 ### Add Gandi webhook jetstack with helm
 
@@ -111,7 +116,7 @@ Apply ingress -> issuer -> certificate
 
 #### update AKS with autoscale
 ```bash
-az aks update --resource-group b6luna --name KlusterLuna --enable-cluster-autoscaler --min-count 1 --max-count 8
+az aks update --resource-group b7luna --name KlusterLuna --enable-cluster-autoscaler --min-count 1 --max-count 8
 ```
 #### Autoscaling
 
@@ -244,7 +249,7 @@ k get ingress
 
 ## Activate the autoscaler on an existing cluster
 ```bash
-az aks update --resource-group b6duna --name AKSClusterd2 --enable-cluster-autoscaler --min-count 1 --max-count 8
+az aks update --resource-group b7luna --name AKSClusterd2 --enable-cluster-autoscaler --min-count 1 --max-count 8
 ```
 
 ## To check the auto scaling creation
