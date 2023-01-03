@@ -1,0 +1,158 @@
+#Redis Deploy
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: az-redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis-azure
+  template:
+    metadata:
+      labels:
+        app: redis-azure
+    spec:
+      volumes:
+      - name: red-vol
+        csi:
+          driver: file.csi.azure.com
+          readOnly: false
+          volumeAttributes:
+            secretName: azure-secret  # required
+            shareName: b7l-red-fileshare  # required
+      containers:
+      - name: redis
+        image: redis:latest
+        args: ["--requirepass", "$(REDIS_PWD)"]
+        volumeMounts:
+        - name: red-vol
+          mountPath: /data
+        env:
+        - name: ALLOW_EMPTY_PASSWORD
+          value: "no"
+        - name: REDIS_PWD
+          valueFrom:
+            secretKeyRef:
+              name: reddb-pass
+              key: password
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 250m
+            memory: 256Mi
+        ports:
+        - containerPort: 6379
+          name: redis
+---
+# Redis Service (ClusterIP)
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-service
+spec: # default type is ClusterIP, there is no reason to specify  type: ClusterIP
+  ports:
+  - port: 6379
+  selector:
+    app: redis-azure
+---
+# Vote App Deploy
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alfred-voteapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: votingapp-azure
+  template:
+    metadata:
+      labels:
+        app: votingapp-azure
+    spec:
+      nodeSelector:
+        "kubernetes.io/os": linux
+      containers:
+      - name: alfred-voting
+        image: whujin11e/public:azure_voting_app
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 250m
+            memory: 256Mi
+        ports:
+        - containerPort: 80
+        env:
+        - name: REDIS
+          value: "redis-service"
+        - name: STRESS_SECS
+          value: "2"
+        - name: REDIS_PWD
+          valueFrom:
+            secretKeyRef:
+              name: reddb-pass
+              key: password
+---
+# App Service (LB)
+apiVersion: v1
+kind: Service
+metadata:
+  name: vote-service
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: votingapp-azure
+---
+#PV creation
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: red-pv
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: azurefile-csi
+  csi:
+    driver: file.csi.azure.com
+    readOnly: false
+    volumeHandle: unique-volumeid  # make sure this volumeid is unique in the cluster
+    volumeAttributes:
+      resourceGroup: b7luna  # optional, only set this when storage account is not in the same resource group as agent node
+      shareName: b7l-red-fileshare
+    nodeStageSecretRef:
+      name: azure-secret
+      namespace: default
+  mountOptions:
+    - dir_mode=0777
+    - file_mode=0777
+    - uid=0
+    - gid=0
+    - mfsymlinks
+    - cache=strict
+    - nosharesock
+    - nobrl
+---
+# PV Claim
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: red-pvc
+spec:
+  storageClassName: azurefile-csi
+  volumeName: red-pv
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 3Gi
+---

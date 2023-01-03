@@ -1,0 +1,11 @@
+apiVersion: cert-manager.io/v1
+kind: certificate
+metadata:
+  name:  kitty.simplon-ely.space
+spec:
+  dnsNames:
+  - kitty.simplon-ely.space
+  issuerRef:
+    name: letsencrypt
+    kind: Issuer
+  secretName: secret-tls
