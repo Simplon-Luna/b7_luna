@@ -492,7 +492,7 @@ spec:
         resources:
           requests:
             cpu: 100m
-            memory: 90Mi​【𝟭𝟰𝟱 𝗸𝗺】
+            memory: 90Mi
         securityContext:
           allowPrivilegeEscalation: true
           capabilities:
