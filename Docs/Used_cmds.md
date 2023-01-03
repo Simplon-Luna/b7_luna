@@ -65,7 +65,7 @@ links :
 
 #### Create KT secret for access to file share
 ```bash
-kubectl create secret generic azure-secret --from-literal=azurestorageaccountname=b7lstorageacc --from-literal=azurestorageaccountkey=JBsbcnoq7ufOg+DJ45B6KN4YNow8GkHhjQHaJfyzn5DyVW9eU0mDfWTpUqMCEKDPWc0HZRyesp5s+AStmP212A==
+kubectl create secret generic azure-secret --from-literal=azurestorageaccountname=b7lstorage --from-literal=azurestorageaccountkey=7TK5/DzbGowqfBKhCbwJR9c3JA41d+J0TTpbFEWFRXDyerLXu96xNAauAK7M+FiNAj4bAlHTdvrj+AStWF805g==
 ```
 ## Partie 2
 
