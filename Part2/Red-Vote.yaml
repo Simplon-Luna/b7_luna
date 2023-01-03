@@ -20,7 +20,7 @@ spec:
           readOnly: false
           volumeAttributes:
             secretName: azure-secret  # required
-            shareName: b6l-red-fileshare  # required
+            shareName: b7l-red-fileshare  # required
       containers:
       - name: redis
         image: redis:latest
@@ -127,8 +127,8 @@ spec:
     readOnly: false
     volumeHandle: unique-volumeid  # make sure this volumeid is unique in the cluster
     volumeAttributes:
-      resourceGroup: b6luna  # optional, only set this when storage account is not in the same resource group as agent node
-      shareName: b6l-red-fileshare
+      resourceGroup: b7luna  # optional, only set this when storage account is not in the same resource group as agent node
+      shareName: b7l-red-fileshare
     nodeStageSecretRef:
       name: azure-secret
       namespace: default
