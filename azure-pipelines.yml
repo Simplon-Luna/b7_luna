@@ -26,8 +26,7 @@ steps:
     namespace: 'brief7-gs'
     command: 'top'
     arguments: 'pod'
-  name: 'prout'
-- bash: echo $prout
+
 
 - task: CmdLine@3
   inputs:
