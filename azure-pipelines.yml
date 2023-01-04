@@ -29,6 +29,7 @@ steps:
       mkdir /home/vsts/version
       mkdir /home/vsts/git
       pwd
+      ls -la
       TESTVAR=$(curl 'https://hub.docker.com/v2/repositories/simplonasa/azure_voting_app/tags' | jq '."results"[0]["name"]')
       echo "$TESTVAR"|sed 's/^.//;s/.$//' >/home/vsts/version/version.vote
       cat /home/vsts/version/version.vote
