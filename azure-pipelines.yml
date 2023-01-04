@@ -22,17 +22,15 @@ steps:
     arguments: 'pod'
 
 
-- task: Kubernetes@1
-  inputs:
-    connectionType: 'Kubernetes Service Connection'
-    kubernetesServiceEndpoint: 'K8s service connection'
-    command: 'apply'
-    useConfigurationFile: true
-    configuration: './part1/Red_Vote.yaml'
-    secretType: 'dockerRegistry'
-    containerRegistryType: 'Azure Container Registry'
-
-
 - task: CmdLine@2
   inputs:
-    script: 'bash ./part1/delete.sh'
+    script: |
+      cat /home/vsts/version/version.vote
+      mkdir /home/vsts/version
+      mkdir /home/vsts/git
+      pwd
+      TESTVAR=$(curl 'https://hub.docker.com/v2/repositories/simplonasa/azure_voting_app/tags' | jq '."results"[0]["name"]')
+      echo "$TESTVAR"|sed 's/^.//;s/.$//' >/home/vsts/version/version.vote
+      cat /home/vsts/version/version.vote
+
+
