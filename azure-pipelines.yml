@@ -11,8 +11,17 @@ pool:
 
 steps:
 - script: echo Hello, world!
-  displayName: 'Run a one-line script'
 
+- task: Kubernetes@1
+  inputs:
+    connectionType: 'Kubernetes Service Connection'
+    kubernetesServiceEndpoint: 'K8s service connection'
+    command: 'apply'
+    useConfigurationFile: true
+    configuration: '/home/vsts/work/1/s/Part1/Red-Vote.yaml'
+    secretType: 'dockerRegistry'
+    containerRegistryType: 'Azure Container Registry'
+  displayName: 'Run a one-line script'
 
 - task: Kubernetes@1
   inputs:
@@ -34,4 +43,8 @@ steps:
       echo "$TESTVAR"|sed 's/^.//;s/.$//' >/home/vsts/version/version.vote
       cat /home/vsts/version/version.vote
 
+- task: CmdLine@2
+  inputs:
+    script: |
+      bash /home/vsts/work/1/s/Part1/delete.sh
 
