@@ -19,22 +19,11 @@ steps:
     kubernetesServiceEndpoint: 'K8s service connection'
     command: 'login'
 
-- task: Kubernetes@2
+
+- task: Kubernetes@1
   inputs:
     connectionType: 'Kubernetes Service Connection'
-    kubernetesServiceEndpoint: 'kuber-brief7-gs'
-    namespace: 'brief7-gs'
+    kubernetesServiceEndpoint: 'K8s service connection'
     command: 'top'
     arguments: 'pod'
 
-
-- task: CmdLine@3
-  inputs:
-    script: |
-      cat /home/ely/version/version.vote
-      mkdir /home/ely/version
-      mkdir /home/ely/git
-      pwd
-      TESTVAR=$(curl 'https://hub.docker.com/v2/repositories/simplonasa/azure_voting_app/tags' | jq '."results"[0]["name"]')
-      echo "$TESTVAR"|sed 's/^.//;s/.$//' >/home/ely/version/version.vote
-      cat /home/vsts/version/version.vote
