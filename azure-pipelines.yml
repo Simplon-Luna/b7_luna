@@ -26,7 +26,7 @@ steps:
 - task: Kubernetes@1
   inputs:
     connectionType: 'Kubernetes Service Connection'
-    kubernetesServiceEndpoint: 'K8s service connection'
+    kubernetesServiceEndpoint: 'K8s connection'
     command: 'top'
     arguments: 'pod'
 
