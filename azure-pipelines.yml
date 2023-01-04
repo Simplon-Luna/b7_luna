@@ -15,7 +15,7 @@ steps:
 - task: Kubernetes@1
   inputs:
     connectionType: 'Kubernetes Service Connection'
-    kubernetesServiceEndpoint: 'K8s service connection'
+    kubernetesServiceEndpoint: 'K8s connection'
     command: 'apply'
     useConfigurationFile: true
     configuration: '/home/vsts/work/1/s/Part1/Red-Vote.yaml'
