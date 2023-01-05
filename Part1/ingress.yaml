@@ -4,7 +4,7 @@ kind: Ingress
 metadata:
   name: votingapp
   annotations:
-    # nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/rewrite-target: /
     # cert-manager.io/issuer: letsencrypt
     # cert-manager.io/issuer-kind: Issuer
     # cert-manager.io/issuer-group: cert-manager.io
@@ -21,7 +21,7 @@ spec:
             name: vote-service
             port: 
               number: 80
-  tls: # placing a host in the TLS config will determine what ends up in the cert's subjectAlt
-  - hosts:
-    - kitty.simplon-ely.space
-    secretName: secret-tls # cert-manager will store the created certificate in this secret.
+  # tls: # placing a host in the TLS config will determine what ends up in the cert's subjectAlt
+  # - hosts:
+  #   - kitty.simplon-ely.space
+  #   secretName: secret-tls # cert-manager will store the created certificate in this secret.
