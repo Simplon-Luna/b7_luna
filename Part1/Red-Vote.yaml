@@ -15,12 +15,8 @@ spec:
     spec:
       volumes:
       - name: red-vol
-        csi:
-          driver: file.csi.azure.com
-          readOnly: false
-          volumeAttributes:
-            secretName: azure-secret  # required
-            shareName: b7l-red-fileshare  # required
+        persistentVolumeClaim:
+            claimName: red-pvc
       containers:
       - name: redis
         image: redis:latest
@@ -77,7 +73,7 @@ spec:
         "kubernetes.io/os": linux
       containers:
       - name: alfred-voting
-        image: whujin11e/public:azure_voting_app
+        image: simplonasa/azure_voting_app:v1.0.11
         resources:
           requests:
             cpu: 100m
@@ -90,8 +86,6 @@ spec:
         env:
         - name: REDIS
           value: "redis-service"
-        - name: STRESS_SECS
-          value: "2"
         - name: REDIS_PWD
           valueFrom:
             secretKeyRef:
@@ -110,38 +104,6 @@ spec:
   selector:
     app: votingapp-azure
 ---
-#PV creation
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: red-pv
-spec:
-  capacity:
-    storage: 5Gi
-  accessModes:
-    - ReadWriteMany
-  persistentVolumeReclaimPolicy: Retain
-  storageClassName: azurefile-csi
-  csi:
-    driver: file.csi.azure.com
-    readOnly: false
-    volumeHandle: unique-volumeid  # make sure this volumeid is unique in the cluster
-    volumeAttributes:
-      resourceGroup: b7luna  # optional, only set this when storage account is not in the same resource group as agent node
-      shareName: b7l-red-fileshare
-    nodeStageSecretRef:
-      name: azure-secret
-      namespace: default
-  mountOptions:
-    - dir_mode=0777
-    - file_mode=0777
-    - uid=0
-    - gid=0
-    - mfsymlinks
-    - cache=strict
-    - nosharesock
-    - nobrl
----
 # PV Claim
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -149,10 +111,8 @@ metadata:
   name: red-pvc
 spec:
   storageClassName: azurefile-csi
-  volumeName: red-pv
   accessModes:
     - ReadWriteMany
   resources:
     requests:
       storage: 3Gi
----
