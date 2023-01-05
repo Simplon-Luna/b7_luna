@@ -2,7 +2,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: votingapp
+  name: voting-service
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
     # cert-manager.io/issuer: letsencrypt
@@ -11,7 +11,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  # - host: kitty.simplon-ely.space
+  - host: kitty.simplon-ely.space
   - http:
       paths:
       - path: /
