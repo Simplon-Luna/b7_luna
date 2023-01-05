@@ -313,10 +313,10 @@ Once that done, we use Jetstack Gandi Cert-Manager Webhook
 helm repo add jetstack https://charts.jetstack.io
 ```
 
-Careful on the tutorial there, the version number isn't the latest. Be sure to check it prior to apply. At this day, 1.9.1 is the latest, not 1.5.4.
+Careful on the tutorial there, the version number isn't the latest. Be sure to check it prior to apply. At this day, 1.10.1 is the latest, not 1.5.4.
 
 ```bash
-helm install cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace --set installCRDs=true --version v1.9.1 --set 'extraArgs={--dns01-recursive-nameservers=8.8.8.8:53\,1.1.1.1:53}'
+helm install cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace --set installCRDs=true --version v1.10.1 --set 'extraArgs={--dns01-recursive-nameservers=8.8.8.8:53\,1.1.1.1:53}'
 ```
 
 ##### Set Gandi-credentials in a K8s secret
