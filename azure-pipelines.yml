@@ -3,6 +3,16 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
+schedules:
+- cron: "0 * * * *" # cron syntax defining the schedule - every hour at 0'
+  displayName: Hourly main schedule # friendly name given to a specific schedule
+  branches:
+    include: # which branches the schedule applies to
+    - main 
+#    exclude: # which branches to exclude from the schedule
+#    - [string]
+  always: false # whether to always run the pipeline or only if there have been source code changes since the last successful scheduled run. The default is false.
+
 trigger:
 - main
 
@@ -10,8 +20,6 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
-- script: echo Hello, world!
-
 - task: Kubernetes@1
   inputs:
     connectionType: 'Kubernetes Service Connection'
