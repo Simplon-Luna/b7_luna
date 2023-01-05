@@ -29,7 +29,7 @@ steps:
     configuration: '/home/vsts/work/1/s/vote-infra.yaml'
     secretType: 'dockerRegistry'
     containerRegistryType: 'Azure Container Registry'
-  displayName: 'Run a one-line script'
+  displayName: 'K8s Infra'
 
 - task: CmdLine@2
   inputs:
