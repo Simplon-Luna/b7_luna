@@ -345,6 +345,8 @@ kubectl create role [role-name] --verb=[Authorised-actions] --resource=[Authoris
 
 ```bash
 kubectl create rolebinding --role=access-secret default-to-secrets --serviceaccount=cert-manager:cert-manager-webhook-gandi-1665664967
+
+kubectl create rolebinding --role=access-secret default-to-secrets --serviceaccount=cert-manager:cert-manager-webhook-gandi-1672932211
 ```
 
 ![ ](https://github.com/Simplon-Luna/b6_Luna/blob/main/Pics/cert-manager_%26_roles.png)
