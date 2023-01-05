@@ -144,7 +144,19 @@ spec:
   - hosts:
     - kitty.simplon-ely.space
     secretName: secret-tls # cert-manager will store the created certificate in this secret.
-
+---
+# Cert Manager
+apiVersion: cert-manager.io/v1
+kind: certificate
+metadata:
+  name:  kitty.simplon-ely.space
+spec:
+  dnsNames:
+  - kitty.simplon-ely.space
+  issuerRef:
+    name: letsencrypt
+    kind: Issuer
+  secretName: secret-tls
 ---
 # # DNS
 # apiVersion: v1
@@ -181,16 +193,3 @@ spec:
 #   namespace: kube-system
 #   resourceVersion: "464"
 #   uid: 32e2daab-e9cf-4d23-b8bf-90a5ef25a9cb
-# ---
-# # Cert Manager
-# apiVersion: cert-manager.io/v1
-# kind: certificate
-# metadata:
-#   name:  kitty.simplon-ely.space
-# spec:
-#   dnsNames:
-#   - kitty.simplon-ely.space
-#   issuerRef:
-#     name: letsencrypt
-#     kind: Issuer
-#   secretName: secret-tls
