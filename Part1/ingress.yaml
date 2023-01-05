@@ -12,7 +12,7 @@ spec:
   ingressClassName: nginx
   rules:
   - host: kitty.simplon-ely.space
-  - http:
+    http:
       paths:
       - path: /
         pathType: Prefix
