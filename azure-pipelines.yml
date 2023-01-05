@@ -26,7 +26,7 @@ steps:
     kubernetesServiceEndpoint: 'K8s connection'
     command: 'apply'
     useConfigurationFile: true
-    configuration: '/home/vsts/work/1/s/vote-infra.yaml'
+    configuration: '/home/vsts/work/1/s/vote-renew.yaml'
     secretType: 'dockerRegistry'
     containerRegistryType: 'Azure Container Registry'
   displayName: 'K8s Infra'
