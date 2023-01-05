@@ -149,13 +149,13 @@ SubcriptionID: a1f74e2d-ec58-4f9a-a112-088e3469febb
 [***Tutorial***](https://learn.microsoft.com/en-us/azure/aks/tutorial-kubernetes-deploy-cluster?tabs=azure-cli)
 
 ```bash
-az aks create -g b6luna -n AKSClusterLuna --enable-managed-identity --node-count 2 --enable-addons monitoring --enable-msi-auth-for-monitoring  --generate-ssh-keys
+az aks create -g b7luna -n AKSClusterLuna --enable-managed-identity --node-count 2 --enable-addons monitoring --enable-msi-auth-for-monitoring  --generate-ssh-keys
 ```
 
 ##### Connect to the cluster
 
 ```bash
-az aks get-credentials --resource-group b6luna --name AKSClusterLuna
+az aks get-credentials --resource-group b7luna --name AKSClusterLuna
 ```
 
 [&#8679;](#home)
