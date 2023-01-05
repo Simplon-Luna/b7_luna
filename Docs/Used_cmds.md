@@ -107,6 +107,10 @@ helm install cert-manager-webhook-gandi --repo https://bwolf.github.io/cert-mana
 ```
 #### create secret role and bind for webhook
 ```bash
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.4.0/deploy/static/provider/cloud/deploy.yaml
+```
+
+```bash
 kubectl create role access-secret --verb=get,list,watch,update,create --resource=secrets
 ```
 ```bash
