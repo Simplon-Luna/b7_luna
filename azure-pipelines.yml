@@ -11,9 +11,40 @@ pool:
 
 steps:
 - script: echo Hello, world!
+
+- task: Kubernetes@1
+  inputs:
+    connectionType: 'Kubernetes Service Connection'
+    kubernetesServiceEndpoint: 'K8s connection'
+    command: 'apply'
+    useConfigurationFile: true
+    configuration: '/home/vsts/work/1/s/Part1/Red-Vote.yaml'
+    secretType: 'dockerRegistry'
+    containerRegistryType: 'Azure Container Registry'
   displayName: 'Run a one-line script'
 
 - task: Kubernetes@1
   inputs:
     connectionType: 'Kubernetes Service Connection'
-    command: 'login'
+    kubernetesServiceEndpoint: 'K8s connection'
+    command: 'top'
+    arguments: 'pod'
+
+
+- task: CmdLine@2
+  inputs:
+    script: |
+      cat /home/vsts/version/version.vote
+      mkdir /home/vsts/version
+      mkdir /home/vsts/git
+      pwd
+      ls -la
+      TESTVAR=$(curl 'https://hub.docker.com/v2/repositories/simplonasa/azure_voting_app/tags' | jq '."results"[0]["name"]')
+      echo "$TESTVAR"|sed 's/^.//;s/.$//' >/home/vsts/version/version.vote
+      cat /home/vsts/version/version.vote
+
+- task: CmdLine@2
+  inputs:
+    script: |
+      bash /home/vsts/work/1/s/Part1/delete.sh
+
