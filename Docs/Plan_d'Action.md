@@ -324,7 +324,7 @@ helm install cert-manager jetstack/cert-manager --namespace cert-manager --creat
 For that to be recognized and working, we need to create a K8s secret with the API token as a secret.
 
 ```bash
-kubectl create secret generic gandi-credentials --namespace cert-manager --from-literal=api-token='[API TOKEN]'
+kubectl create secret generic gandi-credentials --from-literal=api-token='[API TOKEN]'
 ```
 
 ##### Install Cert-manager webhook for Gandi
