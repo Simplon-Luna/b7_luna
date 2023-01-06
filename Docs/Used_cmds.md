@@ -312,3 +312,44 @@ kubectl delete -A ValidatingWebhookConfiguration [rolename]
 ```bash
 kubectl delete -A ValidatingWebhookConfiguration ingress-nginx-admission
 ```
+
+#### Pipeline scheduling
+
+schedules:
+- cron: "0 * * * *" # cron syntax defining the schedule - every hour at 0'
+  displayName: Hourly main schedule # friendly name given to a specific schedule
+  branches:
+    include: # which branches the schedule applies to
+    - main 
+#    exclude: # which branches to exclude from the schedule
+#    - [string]
+  always: false # whether to always run the pipeline or only if there have been source code changes since the last successful scheduled run. The default is false.
+
+#### Cron syntax
+
+[Cron Syntax](https://learn.microsoft.com/en-us/azure/devops/pipelines/process/scheduled-triggers?view=azure-devops&tabs=yaml#cron-syntax)
+
+mm HH DD MM DW
+ \  \  \  \  \__ Days of week
+  \  \  \  \____ Months
+   \  \  \______ Days
+    \  \________ Hours
+     \__________ Minutes
+Field	Accepted values
+Minutes	0 through 59
+Hours	0 through 23
+Days	1 through 31
+Months	1 through 12, full English names, first three letters of English names
+Days of week	0 through 6 (starting with Sunday), full English names, first three letters of English names
+Values can be in the following formats.
+
+Format	Example	Description
+Wildcard	*	Matches all values for this field
+Single value	5	Specifies a single value for this field
+Comma delimited	3,5,6	Specifies multiple values for this field. Multiple formats can be combined, like 1,3-6
+Ranges	1-3	The inclusive range of values for this field
+Intervals	*/4 or 1-5/2	Intervals to match for this field, such as every fourth value or the range 1-5 with a step interval of 2
+Example	Cron expression
+Build every Monday, Wednesday, and Friday at 6:00 PM	0 18 * * Mon,Wed,Fri, 0 18 * * 1,3,5, or 0 18 * * 1-5/2
+Build every 6 hours	0 0,6,12,18 * * *, 0 */6 * * * or 0 0-18/6 * * *
+Build every 6 hours starting at 9:00 AM	0 9,15,21 * * * or 0 9-21/6 * * *

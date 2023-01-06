@@ -353,6 +353,14 @@ kubectl create rolebinding --role=access-secret default-to-secrets --serviceacco
 
 Then apply .yaml as instructed:
 
+First, Ingress without the hosts nor TLS
+
+Then, prepare Gandi with IP adress from Ingress
+
+Then, resettle the Host and TLS in Ingress ***DO NOT DELETE***
+
+Then, apply Issuer and ONLY THEN, the certificate
+
 [ingress.yaml](https://github.com/Simplon-Luna/b6_Luna/blob/main/Part2/ingress.yaml) -> [letsencrypt-issuer.yaml](https://github.com/Simplon-Luna/b6_Luna/blob/main/Part2/letsencrypt-issuer.yaml) -> [certificate.yaml](https://github.com/Simplon-Luna/b6_Luna/blob/main/Part2/certif-space.yaml)
 
 ![ ](https://github.com/Simplon-Luna/b6_Luna/blob/main/Pics/Ingress_%26_DNS_%26_TLS.png)
