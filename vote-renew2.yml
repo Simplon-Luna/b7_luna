@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alfred-voteapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: votingapp-azure
+  template:
+    metadata:
+      labels:
+        app: votingapp-azure
+    spec:
+      nodeSelector:
+        "kubernetes.io/os": linux
+      envFrom:
+        - secretRef:
+            name: version-secret
+      containers:
+      - name: alfred-voting
+        image: simplonasa/azure_voting_app:$(version)
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 250m
+            memory: 256Mi
+        ports:
+        - containerPort: 80
+        env:
+        - name: REDIS
+          value: "redis-service"
+        - name: REDIS_PWD
+          valueFrom:
+            secretKeyRef:
+              name: reddb-pass
+              key: password
