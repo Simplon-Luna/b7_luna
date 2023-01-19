@@ -1,8 +1,3 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 schedules:
 - cron: "0 * * * *" # cron syntax defining the schedule - every hour at 0'
   displayName: Hourly main schedule # friendly name given to a specific schedule
@@ -35,19 +30,21 @@ steps:
       mkdir /home/vsts/git
       pwd
       ls -la
-      
       # Retrieve the version of the image into file for secret
       TESTVAR=$(curl 'https://hub.docker.com/v2/repositories/simplonasa/azure_voting_app/tags' | jq '."results"[0]["name"]')
       echo "$TESTVAR"|sed 's/^.//;s/.$//' >/home/vsts/version/version.vote
       cat /home/vsts/version/version.vote
-      
-      # Retrieve the value of the secret
-      SECRET_VALUE=$(kubectl get secret my-secret -o jsonpath={.data.version})
 
-      # Compare the version number with the secret value
-      if [ "$TESTVAR" != "$SECRET_VALUE" ]; then
+      # Retrieve the value of the secret
+      SECRET_VALUE=$(kubectl get secret my-secret -o jsonpath={.data.version} 2>/dev/null)
+      if [ $? -ne 0 ]; then
+        # secret does not exist
+        kubectl create secret generic my-secret --from-literal=version=$TESTVAR
+      elif [ "$TESTVAR" != "$SECRET_VALUE" ]; then
         # Update the secret with the new version number
         kubectl patch secret my-secret -p "{\"data\":{\"version\":\"$TESTVAR\"}}"
+      else
+        echo "The version in the secret is the same as the version found"
       fi
 
 - task: Kubernetes@2
@@ -56,8 +53,9 @@ steps:
     kubernetesServiceEndpoint: 'K8s connection'
     command: 'apply'
     useConfigurationFile: true
-    configuration: '/home/vsts/work/1/s/vote-renew2.yml'
+    configuration: '/home/vsts/work/1/s/vote-renew.yaml'
     secretType: 'dockerRegistry'
     containerRegistryType: 'Azure Container Registry'
   displayName: 'K8s Infra'
-  condition: : on_success
+  condition: and(succeeded(), ne(variables['TESTVAR'], variables['SECRET_VALUE']))
+
