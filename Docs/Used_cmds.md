@@ -353,3 +353,21 @@ Example	Cron expression
 Build every Monday, Wednesday, and Friday at 6:00 PM	0 18 * * Mon,Wed,Fri, 0 18 * * 1,3,5, or 0 18 * * 1-5/2
 Build every 6 hours	0 0,6,12,18 * * *, 0 */6 * * * or 0 0-18/6 * * *
 Build every 6 hours starting at 9:00 AM	0 9,15,21 * * * or 0 9-21/6 * * *
+
+-----
+
+I apologize for the confusion, you are correct that the kubectl create secret command with the --from-literal flag creates an opaque secret by default. In Kubernetes, when you create a secret using the --from-literal flag, the key-value pairs are encoded in base64.
+
+To create a clear text secret, you can use the --dry-run flag, -o yaml flag and sed command to modify the yaml file, then create the secret using the modified yaml file.
+
+Here's an example of how you can create a clear text secret:
+
+Copy code
+kubectl create secret generic my-secret --from-literal=version=1.0 --dry-run -o yaml | sed 's/opaque/string/' | kubectl apply -f -
+This command creates a secret of type 'generic' named "my-secret" with a key "version" and the value "1.0" in plain text.
+
+This command creates a new secret with the --dry-run flag and -o yaml flag which will output the yaml file representation of the secret, which is then piped to sed command which then replace the value opaque with string. This modified yaml is then passed to the kubectl apply command which creates the secret.
+
+You can then use this command to update the secret as well.
+
+It's important to note that storing sensitive information in clear text in Kubernetes secrets is not recommended as it could be exposed if the secret is compromised or accessed by an unauthorized user. You should use appropriate security measures to protect the secret and only use this approach if it's appropriate for your use case.
