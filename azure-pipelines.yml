@@ -27,7 +27,7 @@ steps:
     kubernetesServiceEndpoint: 'K8s connection'
     command: 'login'
 
-- task: CmdLine@2
+- task: CmdLine@1
   inputs:
     script: |
       cat /home/vsts/version/version.vote
@@ -48,13 +48,13 @@ steps:
         kubectl patch secret my-secret -p "{\"data\":{\"version\":\"$TESTVAR\"}}"
       fi
 
-- task: Kubernetes@1
+- task: Kubernetes@2
   inputs:
     connectionType: 'Kubernetes Service Connection'
     kubernetesServiceEndpoint: 'K8s connection'
     command: 'apply'
     useConfigurationFile: true
-    configuration: '/home/vsts/work/1/s/vote-renew.yaml'
+    configuration: '/home/vsts/work/1/s/vote-renew2.yml'
     secretType: 'dockerRegistry'
     containerRegistryType: 'Azure Container Registry'
   displayName: 'K8s Infra'
