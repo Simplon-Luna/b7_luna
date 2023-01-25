@@ -36,13 +36,13 @@ steps:
       cat /home/vsts/version/version.vote
 
       # Retrieve the value of the secret
-      SECRET_VALUE=$(kubectl get secret my-secret -o jsonpath={.data.version} 2>/dev/null)
+      SECRET_VALUE=$(kubectl get secret version-secret -o jsonpath={.data.version} 2>/dev/null)
       if [ $? -ne 0 ]; then
         # secret does not exist
-        kubectl create secret generic my-secret --from-literal=version=$TESTVAR
+        kubectl create secret generic version-secret --from-literal=version=$TESTVAR
       elif [ "$TESTVAR" != "$SECRET_VALUE" ]; then
         # Update the secret with the new version number
-        kubectl patch secret my-secret -p "{\"data\":{\"version\":\"$TESTVAR\"}}"
+        kubectl patch secret version-secret -p "{\"data\":{\"version\":\"$TESTVAR\"}}"
       else
         echo "The version in the secret is the same as the version found"
       fi
