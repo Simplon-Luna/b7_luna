@@ -47,7 +47,7 @@ steps:
         echo "The version in the secret is the same as the version found"
       fi
 
-- task: Kubernetes@2
+- task: Kubernetes@1
   inputs:
     connectionType: 'Kubernetes Service Connection'
     kubernetesServiceEndpoint: 'K8s connection'
