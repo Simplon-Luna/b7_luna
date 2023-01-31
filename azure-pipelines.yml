@@ -28,7 +28,7 @@ steps:
       mkdir -p /home/vsts/version
       pwd
       ls -la
-      # Retrieve the version of the image into file for secret
+      
       TESTVAR=$(curl 'https://hub.docker.com/v2/repositories/simplonasa/azure_voting_app/tags' | jq '."results"[0]["name"]')
       echo "$TESTVAR"|sed 's/^.//;s/.$//' >/home/vsts/version/version.vote
       cat /home/vsts/version/version.vote
