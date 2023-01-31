@@ -25,13 +25,12 @@ steps:
 - task: CmdLine@2
   inputs:
     script:
-      sudo mkdir -p /home/vsts/version
       pwd
       ls -la
 
       TESTVAR=$(curl 'https://hub.docker.com/v2/repositories/simplonasa/azure_voting_app/tags' | jq '."results"[0]["name"]')
-      echo "$TESTVAR"|sed 's/^.//;s/.$//' >/home/vsts/version/version.vote
-      cat /home/vsts/version/version.vote
+      echo "$TESTVAR"|sed 's/^.//;s/.$//' >./version.vote
+      cat ./version.vote
 
       SECRET_VALUE=$(kubectl get secret version-secret -o jsonpath={.data.version} 2>/dev/null)
       if [ $? -ne 0 ]; then
