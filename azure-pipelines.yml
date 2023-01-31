@@ -24,7 +24,6 @@ steps:
 
 - task: CmdLine@2
   inputs:
-    filename:
     script:
       mkdir -p /home/vsts/version
       pwd
