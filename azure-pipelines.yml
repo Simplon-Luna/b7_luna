@@ -35,6 +35,7 @@ steps:
       cat ./version.vote
       # Retrieve the value of the secret
       SECRET_VALUE=$(kubectl get secret version-secret -o jsonpath={.data.version} 2>/dev/null)
+      echo "$SECRET_VALUE"
       if [ $? -ne 0 ]; then
         # secret does not exist
         kubectl create secret generic version-secret --from-literal=version=$TESTVAR
