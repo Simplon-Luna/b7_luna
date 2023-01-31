@@ -27,14 +27,12 @@ steps:
     script: |
       cat /home/vsts/version/version.vote
       mkdir /home/vsts/version
-      mkdir /home/vsts/git
       pwd
       ls -la
       # Retrieve the version of the image into file for secret
       TESTVAR=$(curl 'https://hub.docker.com/v2/repositories/simplonasa/azure_voting_app/tags' | jq '."results"[0]["name"]')
       echo "$TESTVAR"|sed 's/^.//;s/.$//' >/home/vsts/version/version.vote
       cat /home/vsts/version/version.vote
-
       # Retrieve the value of the secret
       SECRET_VALUE=$(kubectl get secret version-secret -o jsonpath={.data.version} 2>/dev/null)
       if [ $? -ne 0 ]; then
