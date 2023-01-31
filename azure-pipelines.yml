@@ -25,7 +25,7 @@ steps:
 - task: CmdLine@2
   inputs:
     script:
-      mkdir /home/vsts/version
+      sudo mkdir -p /home/vsts/version
       pwd
       ls -la
 
