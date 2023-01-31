@@ -18,15 +18,15 @@ steps:
 
 - task: Kubernetes@1
   inputs:
-    conn ectionType: 'Kubernetes Service Connection'
+    connectionType: 'Kubernetes Service Connection'
     kubernetesServiceEndpoint: 'K8s connection'
     command: 'login'
 
-- task: CmdLine@1
+- task: CmdLine@2
   inputs:
-    script: |
-      cat /home/vsts/version/version.vote
-      mkdir /home/vsts/version
+    filename:
+    script:
+      mkdir -p /home/vsts/version
       pwd
       ls -la
       # Retrieve the version of the image into file for secret
