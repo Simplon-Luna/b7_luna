@@ -29,6 +29,7 @@ steps:
       ls -la
 
       TESTVAR=$(curl 'https://hub.docker.com/v2/repositories/simplonasa/azure_voting_app/tags' | jq '."results"[0]["name"]')
+      echo "$TESTVAR"
       echo "$TESTVAR"|sed 's/^.//;s/.$//' >./version.vote
       cat ./version.vote
 
