@@ -18,25 +18,24 @@ steps:
 
 - task: Kubernetes@1
   inputs:
-    conn ectionType: 'Kubernetes Service Connection'
+    connectionType: 'Kubernetes Service Connection'
     kubernetesServiceEndpoint: 'K8s connection'
     command: 'login'
 
-- task: CmdLine@1
+
+
+- task: CmdLine@2
   inputs:
     script: |
-      cat /home/vsts/version/version.vote
-      mkdir /home/vsts/version
-      mkdir /home/vsts/git
       pwd
       ls -la
       # Retrieve the version of the image into file for secret
       TESTVAR=$(curl 'https://hub.docker.com/v2/repositories/simplonasa/azure_voting_app/tags' | jq '."results"[0]["name"]')
-      echo "$TESTVAR"|sed 's/^.//;s/.$//' >/home/vsts/version/version.vote
-      cat /home/vsts/version/version.vote
-
+      echo "$TESTVAR"|sed 's/^.//;s/.$//' >./version.vote
+      cat ./version.vote
       # Retrieve the value of the secret
       SECRET_VALUE=$(kubectl get secret version-secret -o jsonpath={.data.version} 2>/dev/null)
+      echo "$SECRET_VALUE"
       if [ $? -ne 0 ]; then
         # secret does not exist
         kubectl create secret generic version-secret --from-literal=version=$TESTVAR
