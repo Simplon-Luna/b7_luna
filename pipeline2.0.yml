@@ -19,30 +19,30 @@ steps:
 - task: Kubernetes@1
   inputs:
     connectionType: 'Kubernetes Service Connection'
-    kubernetesServiceEndpoint: 'K8s connection'
+    kubernetesServiceEndpoint: 'konnection'
     command: 'login'
 
-- task: CmdLine@1
+
+- task: CmdLine@2
   inputs:
     script: |
-      cat /home/vsts/version/version.vote
-      mkdir /home/vsts/version
-      mkdir /home/vsts/git
+      set -x
       pwd
       ls -la
       # Retrieve the version of the image into file for secret
-      TESTVAR=$(curl 'https://hub.docker.com/v2/repositories/simplonasa/azure_voting_app/tags' | jq '."results"[0]["name"]')
-      echo "$TESTVAR"|sed 's/^.//;s/.$//' >/home/vsts/version/version.vote
-      cat /home/vsts/version/version.vote
-
+      VERVAR=$(curl 'https://hub.docker.com/v2/repositories/simplonasa/azure_voting_app/tags' | jq '."results"[0]["name"]'|sed -e 's/^"//' -e 's/"$//' <<<"$VERVAR")
+      echo "$VERVAR"|sed 's/^.//;s/.$//' >./version.vote
+      cat ./version.vote
       # Retrieve the value of the secret
-      SECRET_VALUE=$(kubectl get secret my-secret -o jsonpath={.data.version} 2>/dev/null)
+      VERCUR=$(kubectl get secret version-secret -o jsonpath='{.data}'|awk -F ':' '{print $2}' | sed 's/\"//g; s/}//g')
+      VERCUR=$(echo "$VAR1" | base64 -d)
+      echo "$VERCUR"
       if [ $? -ne 0 ]; then
         # secret does not exist
-        kubectl create secret generic my-secret --from-literal=version=$TESTVAR
-      elif [ "$TESTVAR" != "$SECRET_VALUE" ]; then
+        kubectl create secret generic version-secret --from-literal=version=$VERVAR
+      elif [ "$VERVAR" != "$VERCUR" ]; then
         # Update the secret with the new version number
-        kubectl patch secret my-secret -p "{\"data\":{\"version\":\"$TESTVAR\"}}"
+        kubectl patch secret version-secret -p "{\"data\":{\"version\":\"$VERVAR\"}}"
       else
         echo "The version in the secret is the same as the version found"
       fi
@@ -50,12 +50,13 @@ steps:
 - task: Kubernetes@1
   inputs:
     connectionType: 'Kubernetes Service Connection'
-    kubernetesServiceEndpoint: 'K8s connection'
+    kubernetesServiceEndpoint: 'konnection'
     command: 'apply'
     useConfigurationFile: true
     configuration: '/home/vsts/work/1/s/vote-renew.yaml'
     secretType: 'dockerRegistry'
     containerRegistryType: 'Azure Container Registry'
   displayName: 'K8s Infra'
-  condition: and(succeeded(), ne(variables['TESTVAR'], variables['SECRET_VALUE']))
+  condition: and(succeeded(), ne(variables['VERVAR'], variables['SECRET_VALUE']))
+
 

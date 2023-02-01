@@ -69,7 +69,7 @@ We learned that Storage Account, PV creations and bindings aren't necessary, wit
 #### Connect to the cluster
 
 ```bash
-az aks get-credentials --resource-group b7luna --name KlusterLuna
+az aks get-credentials --resource-group b7luna --name AKSClusterLuna
 ```
 
 #### Add Gandi webhook jetstack with helm
