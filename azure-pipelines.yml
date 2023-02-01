@@ -15,11 +15,13 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
+
 - task: Kubernetes@1
   inputs:
     connectionType: 'Kubernetes Service Connection'
     kubernetesServiceEndpoint: 'K8s connection'
     command: 'login'
+
 
 - task: CmdLine@2
   inputs:
@@ -54,4 +56,5 @@ steps:
     containerRegistryType: 'Azure Container Registry'
   displayName: 'K8s Infra'
   condition: and(succeeded(), ne(variables['TESTVAR'], variables['SECRET_VALUE']))
+
 
