@@ -15,22 +15,11 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
-
 - task: Kubernetes@1
   inputs:
     connectionType: 'Kubernetes Service Connection'
     kubernetesServiceEndpoint: 'K8s connection'
     command: 'login'
-
-- task: AzureCLI@2
-  displayName: 'Get AKS Credentials'
-  inputs:
-    azureSubscription: 'Simplon OCC Montpellier ADMIN CLOUD'
-    scriptType: 'bash'
-    scriptLocation: 'inlineScript'
-    inlineScript: |
-      az login
-      az aks get-credentials --resource-group b7luna --name AKSClusterLuna
 
 - task: CmdLine@2
   inputs:
