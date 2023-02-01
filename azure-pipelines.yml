@@ -26,6 +26,8 @@ steps:
 
 - task: CmdLine@2
   inputs:
+   connectionType: 'Kubernetes Service Connection'
+   kubernetesServiceEndpoint: 'K8s connection'
     script: |
       pwd
       ls -la
