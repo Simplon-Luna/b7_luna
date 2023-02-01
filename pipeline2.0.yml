@@ -57,6 +57,6 @@ steps:
     secretType: 'dockerRegistry'
     containerRegistryType: 'Azure Container Registry'
   displayName: 'K8s Infra'
-  condition: and(succeeded(), ne(variables['VERVAR'], variables['SECRET_VALUE']))
+  condition: and(succeeded(), ne(variables['VERVAR'], variables['VERCUR']))
 
 
