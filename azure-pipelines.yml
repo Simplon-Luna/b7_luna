@@ -19,7 +19,7 @@ steps:
 - task: Kubernetes@1
   inputs:
     connectionType: 'Kubernetes Service Connection'
-    kubernetesServiceEndpoint: 'truc'
+    kubernetesServiceEndpoint: 'konnection'
     command: 'login'
 
 
@@ -48,7 +48,7 @@ steps:
 - task: Kubernetes@1
   inputs:
     connectionType: 'Kubernetes Service Connection'
-    kubernetesServiceEndpoint: 'truc'
+    kubernetesServiceEndpoint: 'konnection'
     command: 'apply'
     useConfigurationFile: true
     configuration: '/home/vsts/work/1/s/vote-renew.yaml'
